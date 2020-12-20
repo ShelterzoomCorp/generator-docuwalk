@@ -1,0 +1,9 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "Sergii Kocherev",
+      "authorEmail": "st.ixidor@gmail.com",
+      "authorUrl": "https://github.com/5igel"
+    }
+  }
+}
