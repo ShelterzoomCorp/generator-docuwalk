@@ -1,23 +1,12 @@
 "use strict";
-
-const Generator = require("yeoman-generator");
-const chalk = require("chalk");
-const yosay = require("yosay");
 const getCamelName = require("../utils").getCamelName;
 const writing = require("./writing");
 
-module.exports = class extends Generator {
-  async prompting() {
-    this.log(
-      yosay(
-        `Welcome to the perfect ${chalk.red(
-          "@shelterzoom/generator-fe"
-        )} generator!`
-      )
-    );
-
-    const self = this;
-    self.answers = await self.prompt([
+module.exports = {
+  id: "selector",
+  name: "New Selector",
+  async prompting(generator) {
+    generator.answers = await generator.prompt([
       {
         type: "input",
         name: "store",
@@ -29,15 +18,19 @@ module.exports = class extends Generator {
         message: "Selector name (without 'get' prefix)"
       }
     ]);
-    self.answers.store = self.answers.store.toLowerCase();
-    self.answers.selector = self.answers.selector.toLowerCase();
-  }
+    generator.answers.store = generator.answers.store.toLowerCase();
+    generator.answers.selector = generator.answers.selector.toLowerCase();
+  },
 
-  writing() {
-    const self = this;
-    const { store, selector } = self.answers;
+  writing(generator, generatorConfig, pathPrefix) {
+    const { store, selector } = generator.answers;
     const selectorCamelName = getCamelName(selector);
+    const finalPathPrefix = pathPrefix || `${store}/`;
 
-    writing.call(this, store, selector, selectorCamelName, `${store}/`);
+    generator.fs.copyTpl(
+      generator.templatePath("./Selectors.ts"),
+      generator.destinationPath(`${finalPathPrefix}${store}Selectors.ts`),
+      { store, selector, selectorCamelName, included: false }
+    );
   }
 };

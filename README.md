@@ -27,6 +27,8 @@ yo docuwalk
 
 MIT © [Sergii Kocherev](https://github.com/5igel)
 
+## Special thanks
+Thanks to Microsoft vscode-generator-code repo for idea how to split generators
 
 [npm-image]: https://badge.fury.io/js/generator-docuwalk.svg
 [npm-url]: https://npmjs.org/package/generator-docuwalk

@@ -7,10 +7,9 @@ const path = require("path");
 const component = require("./generate-component");
 const icon = require("./generate-icon");
 const saga = require("./generate-saga");
-const extensionGenerators = [component, icon, saga];
+const selector = require("./generate-selector");
+const extensionGenerators = [component, icon, saga, selector];
 
-// @TODO finish this
-// based on https://github.com/microsoft/vscode-generator-code/blob/master/generators/app/index.js
 module.exports = class extends Generator {
   constructor(args, opts) {
     super(args, opts);
