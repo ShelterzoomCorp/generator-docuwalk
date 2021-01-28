@@ -1,23 +1,13 @@
 "use strict";
-const Generator = require("yeoman-generator");
-const chalk = require("chalk");
-const yosay = require("yosay");
-const writingSaga = require("../generate-saga/writing");
-const writingSelector = require("../selector/writing");
+const { writing: writingSaga } = require("../generate-saga");
+const { writing: writingSelector } = require("../generate-selector");
 const getCamelName = require("../utils").getCamelName;
 
-module.exports = class extends Generator {
-  async prompting() {
-    this.log(
-      yosay(
-        `Welcome to the perfect ${chalk.red(
-          "@shelterzoom/generator-fe"
-        )} generator!`
-      )
-    );
-
-    const self = this;
-    self.answers = await self.prompt([
+module.exports = {
+  id: "store",
+  name: "New Store",
+  async prompting(generator) {
+    generator.answers = await generator.prompt([
       {
         type: "confirm",
         name: "inFile",
@@ -38,13 +28,12 @@ module.exports = class extends Generator {
       }
     ]);
 
-    self.answers.store = self.answers.store.toLowerCase();
-    self.answers.selector = self.answers.selector.toLowerCase();
-  }
+    generator.answers.store = generator.answers.store.toLowerCase();
+    generator.answers.selector = generator.answers.selector.toLowerCase();
+  },
 
-  writing() {
-    const self = this;
-    const { inFile, store, selector } = self.answers;
+  writing(generator) {
+    const { inFile, store, selector } = generator.answers;
     const reducer = store;
     const withReducers = reducer.length > 0;
     const withSelectors = selector.length > 0;
@@ -53,9 +42,9 @@ module.exports = class extends Generator {
     const reducerCamelName = getCamelName(reducer);
     const selectorCamelName = getCamelName(selector);
 
-    this.fs.copyTpl(
-      self.templatePath("./Reducers.ts"),
-      self.destinationPath(`${pathPrefix}/${store}Reducers.ts`),
+    generator.fs.copyTpl(
+      generator.templatePath("./Reducers.ts"),
+      generator.destinationPath(`${pathPrefix}/${store}Reducers.ts`),
       {
         store,
         storeCamelName,
@@ -70,19 +59,13 @@ module.exports = class extends Generator {
     );
 
     if (!inFile) {
-      const templatePath = this.templatePath();
+      const templatePath = generator.templatePath();
 
-      this.sourceRoot(`${templatePath}/../../saga/templates`);
-      writingSaga.call(this, store, storeCamelName, reducer, `${pathPrefix}/`);
+      generator.sourceRoot(`${templatePath}/../../generate-saga/templates`);
+      writingSaga(generator, {}, `${pathPrefix}/`);
 
-      this.sourceRoot(`${templatePath}/../../selector/templates`);
-      writingSelector.call(
-        this,
-        store,
-        selector,
-        selectorCamelName,
-        `${pathPrefix}/`
-      );
+      generator.sourceRoot(`${templatePath}/../../generate-selector/templates`);
+      writingSelector(generator, {}, `${pathPrefix}/`);
     }
   }
 };

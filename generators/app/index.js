@@ -8,7 +8,9 @@ const component = require("./generate-component");
 const icon = require("./generate-icon");
 const saga = require("./generate-saga");
 const selector = require("./generate-selector");
-const extensionGenerators = [component, icon, saga, selector];
+const store = require("./generate-store");
+const story = require("./generate-story");
+const extensionGenerators = [component, icon, saga, selector, store, story];
 
 module.exports = class extends Generator {
   constructor(args, opts) {

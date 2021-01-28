@@ -60,9 +60,9 @@ export const <%= store %>Reducer = <%= store %>.reducer;
 <%_ } _%>
 
 <%_ if (inFile && withReducers) { _%>
-  <%- include('../../saga/templates/Sagas.ts', {store, storeCamelName, reducer, included: true}); %>
+  <%- include('../../generate-saga/templates/Sagas.ts', {store, storeCamelName, reducer, included: true}); %>
 <%_ } _%>
 
 <%_ if (inFile && withSelectors) { _%>
-  <%- include('../../selector/templates/Selectors.ts', {store, selector, selectorCamelName, included: true}); %>
+  <%- include('../../generate-selector/templates/Selectors.ts', {store, selector, selectorCamelName, included: true}); %>
 <%_ } _%>

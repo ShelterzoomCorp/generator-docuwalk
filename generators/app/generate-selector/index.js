@@ -1,6 +1,5 @@
 "use strict";
 const getCamelName = require("../utils").getCamelName;
-const writing = require("./writing");
 
 module.exports = {
   id: "selector",
