@@ -1,23 +1,10 @@
 "use strict";
-const chalk = require("chalk");
-const yosay = require("yosay");
 const writingStory = require("../generate-story/writing");
 
-// @TODO finish based on
-// https://github.com/microsoft/vscode-generator-code/blob/master/generators/app/generate-colortheme.js
 module.exports = {
   id: "component",
   name: "New Component",
-  async prompting() {
-    this.log(
-      yosay(
-        `Welcome to the perfect ${chalk.red(
-          "@shelterzoom/generator-fe"
-        )} generator!`
-      )
-    );
-
-    const self = this;
+  async prompting(self) {
     self.answers = await self.prompt([
       {
         type: "input",
@@ -33,25 +20,25 @@ module.exports = {
     ]);
   },
 
-  writing() {
-    const self = this;
+  writing(self) {
     const { name, storybook } = self.answers;
-
-    this.fs.copyTpl(
+    self.fs.copyTpl(
       self.templatePath("./index.ts"),
       self.destinationPath(`${name}/index.ts`),
       { name }
     );
 
-    this.fs.copyTpl(
+    self.fs.copyTpl(
       self.templatePath("./Component.tsx"),
       self.destinationPath(`${name}/${name}.tsx`),
       { name }
     );
 
     if (storybook) {
-      this.sourceRoot(`${this.templatePath()}/../../story/templates`);
-      writingStory.call(this, name, `${name}/`);
+      // @TODO fix after refactor story
+      self.log(`path::${self.templatePath()}`);
+      self.sourceRoot(`${self.templatePath()}/../../story/templates`);
+      writingStory.call(self, name, `${name}/`);
     }
   }
 };

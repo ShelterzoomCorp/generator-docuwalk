@@ -2,6 +2,8 @@
 const Generator = require("yeoman-generator");
 const chalk = require("chalk");
 const yosay = require("yosay");
+const path = require("path");
+
 const component = require("./generate-component");
 const icon = require("./generate-icon");
 const extensionGenerators = [component, icon];
@@ -73,14 +75,16 @@ module.exports = class extends Generator {
     }
   }
 
+  // Write files
   writing() {
-    this.fs.copy(
-      this.templatePath("dummyfile.txt"),
-      this.destinationPath("dummyfile.txt")
-    );
-  }
+    if (this.abort) {
+      return;
+    }
 
-  install() {
-    // this.installDependencies();
+    this.sourceRoot(
+      path.join(__dirname, `./generate-${this.extensionConfig.type}/templates/`)
+    );
+
+    return this.extensionGenerator.writing(this, this.extensionConfig);
   }
 };
