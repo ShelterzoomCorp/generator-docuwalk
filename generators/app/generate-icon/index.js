@@ -1,6 +1,4 @@
 "use strict";
-const chalk = require("chalk");
-const yosay = require("yosay");
 const _ = require("lodash");
 
 function capitalize(str) {
@@ -10,17 +8,8 @@ function capitalize(str) {
 module.exports = {
   id: "icon",
   name: "New Icon",
-  async prompting() {
-    this.log(
-      yosay(
-        `Welcome to the perfect ${chalk.red(
-          "@shelterzoom/generator-fe"
-        )} generator!`
-      )
-    );
-
-    const self = this;
-    self.answers = await self.prompt([
+  async prompting(generator) {
+    generator.answers = await generator.prompt([
       {
         type: "input",
         name: "name",
@@ -29,24 +18,17 @@ module.exports = {
     ]);
   },
 
-  writing() {
-    const self = this;
-    const { name } = self.answers;
+  writing(generator) {
+    const { name } = generator.answers;
     const normalizedName = capitalize(_.camelCase(name));
     const props = {
       name: normalizedName,
       kebabName: name
     };
 
-    this.fs.copyTpl(
-      self.templatePath("./index.ts"),
-      self.destinationPath(`${normalizedName}/index.ts`),
-      props
-    );
-
-    this.fs.copyTpl(
-      self.templatePath("./Component.tsx"),
-      self.destinationPath(`${normalizedName}/${normalizedName}.tsx`),
+    generator.fs.copyTpl(
+      generator.templatePath("./Component.tsx"),
+      generator.destinationPath(`${normalizedName}.tsx`),
       props
     );
   }

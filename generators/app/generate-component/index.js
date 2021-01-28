@@ -4,8 +4,8 @@ const writingStory = require("../generate-story/writing");
 module.exports = {
   id: "component",
   name: "New Component",
-  async prompting(self) {
-    self.answers = await self.prompt([
+  async prompting(generator) {
+    generator.answers = await generator.prompt([
       {
         type: "input",
         name: "name",
@@ -20,25 +20,25 @@ module.exports = {
     ]);
   },
 
-  writing(self) {
-    const { name, storybook } = self.answers;
-    self.fs.copyTpl(
-      self.templatePath("./index.ts"),
-      self.destinationPath(`${name}/index.ts`),
+  writing(generator) {
+    const { name, storybook } = generator.answers;
+    generator.fs.copyTpl(
+      generator.templatePath("./index.ts"),
+      generator.destinationPath(`${name}/index.ts`),
       { name }
     );
 
-    self.fs.copyTpl(
-      self.templatePath("./Component.tsx"),
-      self.destinationPath(`${name}/${name}.tsx`),
+    generator.fs.copyTpl(
+      generator.templatePath("./Component.tsx"),
+      generator.destinationPath(`${name}/${name}.tsx`),
       { name }
     );
 
     if (storybook) {
       // @TODO fix after refactor story
-      self.log(`path::${self.templatePath()}`);
-      self.sourceRoot(`${self.templatePath()}/../../story/templates`);
-      writingStory.call(self, name, `${name}/`);
+      generator.log(`path::${generator.templatePath()}`);
+      generator.sourceRoot(`${generator.templatePath()}/../../story/templates`);
+      writingStory.call(generator, name, `${name}/`);
     }
   }
 };
