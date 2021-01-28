@@ -6,7 +6,8 @@ const path = require("path");
 
 const component = require("./generate-component");
 const icon = require("./generate-icon");
-const extensionGenerators = [component, icon];
+const saga = require("./generate-saga");
+const extensionGenerators = [component, icon, saga];
 
 // @TODO finish this
 // based on https://github.com/microsoft/vscode-generator-code/blob/master/generators/app/index.js

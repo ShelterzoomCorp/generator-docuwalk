@@ -1,23 +1,11 @@
 "use strict";
-
-const Generator = require("yeoman-generator");
-const chalk = require("chalk");
-const yosay = require("yosay");
 const getCamelName = require("../utils").getCamelName;
-const writing = require("./writing");
 
-module.exports = class extends Generator {
-  async prompting() {
-    this.log(
-      yosay(
-        `Welcome to the perfect ${chalk.red(
-          "@shelterzoom/generator-fe"
-        )} generator!`
-      )
-    );
-
-    const self = this;
-    self.answers = await self.prompt([
+module.exports = {
+  id: "saga",
+  name: "New Saga",
+  async prompting(generator) {
+    generator.answers = await generator.prompt([
       {
         type: "input",
         name: "store",
@@ -29,15 +17,18 @@ module.exports = class extends Generator {
         message: "Reducer name"
       }
     ]);
-    self.answers.store = self.answers.store.toLowerCase();
-    self.answers.reducer = self.answers.reducer.toLowerCase();
-  }
-
-  writing() {
-    const self = this;
-    const { store, reducer } = self.answers;
+    generator.answers.store = generator.answers.store.toLowerCase();
+    generator.answers.reducer = generator.answers.reducer.toLowerCase();
+  },
+  writing(generator, generatorConfig, pathPrefix) {
+    const { store, reducer } = generator.answers;
     const storeCamelName = getCamelName(store);
+    const finalPathPrefix = pathPrefix || `${store}/`;
 
-    writing.call(this, store, storeCamelName, reducer, `${store}/`);
+    generator.fs.copyTpl(
+      generator.templatePath("./Sagas.ts"),
+      generator.destinationPath(`${finalPathPrefix}${store}Sagas.ts`),
+      { store, storeCamelName, reducer, included: false }
+    );
   }
 };
