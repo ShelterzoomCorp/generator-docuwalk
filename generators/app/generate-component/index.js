@@ -1,5 +1,5 @@
 "use strict";
-const writingStory = require("../generate-story/writing");
+const { writing, id } = require("../generate-story");
 
 module.exports = {
   id: "component",
@@ -35,10 +35,10 @@ module.exports = {
     );
 
     if (storybook) {
-      // @TODO fix after refactor story
-      generator.log(`path::${generator.templatePath()}`);
-      generator.sourceRoot(`${generator.templatePath()}/../../story/templates`);
-      writingStory.call(generator, name, `${name}/`);
+      generator.sourceRoot(
+        `${generator.templatePath()}/../../generate-${id}/templates`
+      );
+      writing(generator, `${name}/`);
     }
   }
 };
